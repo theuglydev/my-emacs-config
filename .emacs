@@ -32,6 +32,12 @@
 	  (find-file "~/.emacs"))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;;;;;;;;;;;;;; remove all bars
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;;;;;;;;;; SWITCH FOCUS ON NEW SPLITS
 (defun split-and-follow-horizontally ()
   (interactive)
@@ -97,11 +103,9 @@
 (global-set-key (kbd "C-x 5 t") 'my-toggle-window-split)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;;;;;;; evil mode ;;;;;;;;;
-(require 'evil)
-(evil-mode t)
-;;;;;;;;;;;;;;;;;
-
+;;;;;;;;;;;;;;;;;;;;;;; evil mode
+(evil-mode 1)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;; PROJECTILE, IVY, COUNSEL
 ;;;;;;; IVY and COUNSEL
@@ -146,63 +150,45 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;; PROGRAMMING STUFF
+;; (use-package lsp-mode
+;;   :ensure t)
+;; (use-package lsp-ui
+;;   :ensure t)
+;; (use-package flycheck
+;;   :ensure t)
+;; (setq global-flycheck-mode 1)
+
+(require 'yafolding)
+
+;; Rust Mode
+(use-package rust-mode
+  :ensure t)
+
+;; LSP Mode for Rust
 (use-package lsp-mode
-  :ensure t)
+  :ensure t
+  :hook (rust-mode . lsp))
+
+;; Optional: LSP UI for better integration
 (use-package lsp-ui
-  :ensure t)
+  :ensure t
+  :commands lsp-ui-mode)
+
+;; Optional: Flycheck for syntax checking
 (use-package flycheck
-  :ensure t)
-(setq global-flycheck-mode 1)
+  :ensure t
+  :init (global-flycheck-mode))
+
+;; Optional: Flycheck integration with Rust
+(use-package flycheck-rust
+  :ensure t
+  :config
+  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+
 
 ;;;;;;;; RELATIVE LINE NUMBERS
-(add-hook 'prog-mode-hook #'display-line-numbers-mode)
-(setq display-line-numbers-type 'relative)
+;; (add-hook 'prog-mode-hook #'display-line-numbers-mode)
+;; (setq display-line-numbers-type 'relative)
 
 (global-hl-line-mode 1) ;; Enable global-hl-line-mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;;;; PYTHON
-(use-package lsp-pyright
-  :ensure t)
-;;;;;;;;;;;;;;
-
-;;;;;;;;;;;;;;;; RUST
-(add-hook 'rust-mode-hook #'lsp)
-(use-package rustic
-  :ensure t)
-;;;;;;;;;;;;;;;;;;;;;
-
-;;;;;;;;;;;;;;;;; JS and TS
-;; (use-package typescript-mode
-;;   :ensure t)
-(setq lsp-javascript-typescript-server-command '("typescript-language-server" "--stdio"))
-
-(add-hook 'js-mode-hook #'lsp)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;;;;;;;;;;;;;;;;; CLOJURE
-(add-hook 'clojure-mode-hook #'lsp)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;;;;;;;;;;;; HASKELL
-(add-hook 'haskell-mode #'lsp)
-;;;;;;;;;;;;;;;;;;;;;;
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes '(night-owl))
- '(custom-safe-themes
-   '("f5a7e07642decb17b03483af7c44e93353d2b128de403bf301651954c628c0ab" "4363ac3323e57147141341a629a19f1398ea4c0b25c79a6661f20ffc44fdd2cb" "2ccdb4796d3238dd0794f7869750fb0e81fe4f9212f9528cfd4f41da0c78cf25" "1d2e7f3afdd436cf7b1f7d009111e9890328da1f68380c71ad8041ebd62a0a95" "3bd14b5c432f95aa1cd589d612151d5214c6cb4239b87dd1ffbda51b71d48393" "c3bcebe2117cbd3ab7e2ccb8536c6da089bf7efbdbac697e134205b5729ca358" default))
- '(package-selected-packages
-   '(autumn-light-theme multiple-cursors night-owl-theme lsp-haskell flycheck-clojure clojure-mode request inkpot-theme yabaki-theme typescript-mode rustic lsp-pyright flycheck lsp-ui lsp-mode counsel ivy projectile company-box company evil)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
