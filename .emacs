@@ -197,6 +197,20 @@
   :config
   (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
+;;;;;;;;;;;;;;;; TYPESCRIPT
+(setq lsp-javascript-typescript-server-command '("typescript-language-server" "--stdio"))
+(add-hook 'js-mode-hook #'lsp)
+(add-hook 'typescript-mode-hook 'lsp-deferred)
+(add-hook 'javascript-mode-hook 'lsp-deferred)
+
+(add-hook 'lsp-mode-hook 'lsp-ui-mode)
+
+(use-package prettier
+  :hook ((typescript-mode . prettier-mode)
+         (tsx-mode . prettier-mode)))
+(add-hook 'before-save-hook 'lsp-format-buffer) ;; Format using LSP before saving
+(add-hook 'before-save-hook 'lsp-organize-imports) ;; Organize imports before saving
+
 ;;;;;;;; RELATIVE LINE NUMBERS
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
