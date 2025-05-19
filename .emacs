@@ -4,6 +4,9 @@
 (package-initialize)
 ;;;;;;;;
 
+;;;;;; FONT SIZE
+(set-face-attribute 'default nil :height 150)
+
 ;;;; NO BACK UP FILES
 (setq make-backup-files nil)
 
@@ -210,6 +213,25 @@
          (tsx-mode . prettier-mode)))
 (add-hook 'before-save-hook 'lsp-format-buffer) ;; Format using LSP before saving
 (add-hook 'before-save-hook 'lsp-organize-imports) ;; Organize imports before saving
+
+;;;;;;;;;;;;;;;;;;;;;;; CLOJURE
+;; Clojure mode + CIDER
+(use-package clojure-mode
+  :ensure t)
+
+(use-package cider
+  :ensure t)
+
+;; must have clojure and clojure lsp
+;; brew install clojure
+;; brew install clojure-lsp/brew/clojure-lsp-native
+(with-eval-after-load 'clojure-mode
+  (require 'lsp-mode)
+  (add-hook 'clojure-mode-hook #'lsp)
+  (add-hook 'clojurec-mode-hook #'lsp)
+  (add-hook 'clojurescript-mode-hook #'lsp)
+  (setq lsp-clojure-server-command '("clojure-lsp")))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;; RELATIVE LINE NUMBERS
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
