@@ -213,6 +213,29 @@
          (tsx-mode . prettier-mode)))
 (add-hook 'before-save-hook 'lsp-format-buffer) ;; Format using LSP before saving
 (add-hook 'before-save-hook 'lsp-organize-imports) ;; Organize imports before saving
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;; GOLANG
+(setenv "PATH" (concat (getenv "PATH") ":" (expand-file-name "~/go/bin")))
+(add-to-list 'exec-path (expand-file-name "~/go/bin"))
+(use-package go-mode
+  :ensure t)
+
+;; optional: only needed if Emacs can't find gopls automatically
+;; (setq lsp-gopls-server-path "gopls")
+
+(add-hook 'go-mode-hook #'lsp-deferred)
+
+;; Turn on lsp-ui when lsp starts (you already do this globally, but safe)
+(add-hook 'lsp-mode-hook 'lsp-ui-mode)
+
+;; Format + organize imports on save (buffer-local so it only affects Go buffers)
+(add-hook 'go-mode-hook
+          (lambda ()
+            (add-hook 'before-save-hook #'lsp-format-buffer nil t)
+            (add-hook 'before-save-hook #'lsp-organize-imports nil t)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 ;;;;;;;;;;;;;;;;;;;;;;; CLOJURE
 ;; Clojure mode + CIDER
